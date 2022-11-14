@@ -2,6 +2,7 @@ from typing import List
 from fastapi import FastAPI, HTTPException
 from models import User, Gender, Role, UserUpdateRequest
 from uuid import UUID, uuid4
+from fastapi.testclient import TestClient
 
 app = FastAPI ()
 
@@ -63,3 +64,9 @@ async def update_user(user_update: UserUpdateRequest, user_id: UUID):
         status_code=404,
         detail=f"user with id: {user_id} does not exist"
     )
+client=TestClient(app)
+
+def test_read_main():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"msg": "Hello World"}
